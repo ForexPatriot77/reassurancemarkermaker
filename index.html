@@ -72,7 +72,7 @@ function render(){
 }
 ['type','number','direction','arrow','post','border','scale'].forEach(id=>$(id).addEventListener('input',render));
 function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function sourceSvg(){return new XMLSerializer().serializeToString(svg).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ')}
+function sourceSvg(){return new XMLSerializer().serializeToString(svg)}
 $('svg').onclick=()=>download(new Blob([sourceSvg()],{type:'image/svg+xml;charset=utf-8'}),'route-marker.svg');
 $('png').onclick=()=>{const xml=sourceSvg(),url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml'})),img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1200;c.height=880;c.getContext('2d').clearRect(0,0,1200,880);c.getContext('2d').drawImage(img,0,0,1200,880);c.toBlob(b=>download(b,'route-marker.png'),'image/png');URL.revokeObjectURL(url)};img.onerror=()=>{URL.revokeObjectURL(url);alert('PNG export failed in this browser. Try SVG export instead.')};img.src=url};
 $('reset').onclick=()=>{$('type').value='interstate';$('number').value='40';$('direction').value='NORTH';$('arrow').value='none';$('post').checked=true;$('border').checked=true;$('scale').value='1';render()};
