@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b2b">
+<title>Reassurance Marker Maker</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1421;--panel:#152235;--panel2:#1b2b42;--line:#2d405b;--muted:#9aabc0;--text:#f3f6fb;--accent:#f3b744;--blue:#2d6fb5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#233a57 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:28px max(22px,calc((100vw - 1180px)/2));border-bottom:1px solid #26364c;background:#0c1421cc}
+.brand{display:flex;align-items:center;gap:12px}.mark{width:38px;height:38px;border-radius:11px;background:var(--accent);color:#152235;display:grid;place-items:center;font-weight:900;font-size:19px}
+h1{font-size:clamp(23px,3vw,32px);line-height:1.15;margin:0;letter-spacing:-.8px}.sub{margin:6px 0 0;color:var(--muted)}
+main{max-width:1180px;margin:28px auto;padding:0 22px 50px;display:grid;grid-template-columns:350px minmax(0,1fr);gap:22px}
+.panel{background:linear-gradient(160deg,#192a40,#121e2f);border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 18px 50px #0002}
+h2{font-size:16px;margin:0 0 17px;letter-spacing:.2px}.field{margin:0 0 17px}.field label{display:block;font-size:13px;color:#c6d2e1;font-weight:650;margin-bottom:7px}
+select,input{width:100%;background:#0c1727;color:var(--text);border:1px solid #3a4d68;border-radius:9px;padding:11px 12px;font:inherit;outline:none}
+select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #f3b74422}
+input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent)}.check{display:flex;align-items:center;gap:9px;color:#d4deeb;font-size:14px}
+.hint{font-size:12px;color:var(--muted);margin:6px 0 0}
+.preview-panel{display:flex;flex-direction:column;min-height:590px}.preview-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.preview-head h2{margin:0}
+.stage{flex:1;min-height:420px;border-radius:13px;border:1px solid #344962;background-color:#101c2b;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:26px 26px;display:grid;place-items:center;overflow:hidden;padding:25px}
+#signSvg{width:min(100%,620px);height:auto;max-height:450px;filter:drop-shadow(0 16px 18px #0007)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.btn{border:1px solid #435975;background:#22344c;color:#fff;border-radius:9px;padding:10px 15px;font:700 13px inherit;cursor:pointer}.btn:hover{background:#2b4361}.btn.primary{background:var(--accent);color:#172235;border-color:var(--accent)}.btn.primary:hover{background:#ffd078}
+.note{font-size:12px;color:var(--muted);margin:14px 0 0}.section-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:#8296b0;font-weight:800;margin:22px 0 12px}
+footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:#8496ad;font-size:12px}
+@media(max-width:800px){main{grid-template-columns:1fr}.preview-panel{min-height:500px}.stage{min-height:360px}header{padding-top:22px;padding-bottom:22px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="mark">R</div><div><h1>Reassurance Marker Maker</h1><p class="sub">Build a clean, roadside-style route marker. Preview it live, then export.</p></div></div></header>
+<main>
+<section class="panel" aria-label="Marker settings">
+<h2>Marker settings</h2>
+<div class="field"><label for="type">Route shield</label><select id="type"><option value="interstate">Interstate</option><option value="us">U.S. Highway</option><option value="state">State Highway</option></select></div>
+<div class="field"><label for="number">Route number</label><input id="number" value="40" maxlength="5" inputmode="numeric" autocomplete="off"><p class="hint">Use up to five characters (numbers or letters).</p></div>
+<div class="field"><label for="direction">Direction</label><select id="direction"><option value="NORTH">North</option><option value="SOUTH">South</option><option value="EAST">East</option><option value="WEST">West</option><option value="">No direction label</option></select></div>
+<div class="field"><label for="arrow">Arrow</label><select id="arrow"><option value="none">No arrow</option><option value="up">↑ Straight ahead</option><option value="left">← Left</option><option value="right">→ Right</option><option value="down">↓ Straight ahead (down)</option></select></div>
+<div class="section-label">Display</div>
+<label class="check"><input type="checkbox" id="post" checked> Show roadside post</label>
+<label class="check" style="margin-top:12px"><input type="checkbox" id="border" checked> Show marker border</label>
+<div class="field" style="margin-top:18px"><label for="scale">Marker size</label><select id="scale"><option value="1">Standard</option><option value="0.85">Compact</option><option value="1.15">Large</option></select></div>
+<p class="note">Visual design inspired by common U.S. route-marker conventions. This is an illustrative maker, not an official MUTCD sign design or approval tool.</p>
+</section>
+<section class="panel preview-panel">
+<div class="preview-head"><h2>Live preview</h2><span style="font-size:12px;color:#9aabc0">SVG artwork</span></div>
+<div class="stage"><svg id="signSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440" role="img" aria-label="Route marker preview"></svg></div>
+<div class="actions"><button class="btn primary" id="png">Download PNG</button><button class="btn" id="svg">Download SVG</button><button class="btn" id="reset">Reset</button></div>
+</section>
+</main>
+<footer>Made for creative mockups and educational use. Always follow applicable standards and local requirements for real roadway signage.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const svg=$('signSvg');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function shield(type,n){
+ const common='stroke="#fff" stroke-width="7" stroke-linejoin="round"';
+ if(type==='interstate')return `<path d="M205 40 Q300 7 395 40 L414 62 L414 234 Q414 267 300 326 Q186 267 186 234 L186 62Z" fill="#fff" stroke="#15243a" stroke-width="8"/><path d="M205 48 Q300 20 395 48 L405 65 L405 104 L195 104 L195 65Z" fill="#c83236"/><path d="M195 110H405V231Q405 259 300 314Q195 259 195 231Z" fill="#205b9b"/><text x="300" y="91" text-anchor="middle" font-size="38" font-weight="900" fill="#fff" letter-spacing="2">INTERSTATE</text><text x="300" y="222" text-anchor="middle" font-size="${n.length>3?75:100}" font-weight="900" fill="#fff">${esc(n)}</text>`;
+ if(type==='us')return `<path d="M190 42 Q300 25 410 42 L398 171 Q385 267 300 327 Q215 267 202 171Z" fill="#fff" stroke="#17263b" stroke-width="10"/><path d="M205 55 Q300 43 395 55 L386 165 Q375 250 300 307 Q225 250 214 165Z" fill="#fff" stroke="#17263b" stroke-width="3"/><text x="300" y="115" text-anchor="middle" font-size="42" font-weight="900" fill="#17263b">U.S.</text><text x="300" y="230" text-anchor="middle" font-size="${n.length>3?72:96}" font-weight="900" fill="#17263b">${esc(n)}</text>`;
+ return `<path d="M300 24 L420 83 L400 235 L300 322 L200 235 L180 83Z" fill="#fff" stroke="#17263b" stroke-width="10"/><path d="M300 39 L405 91 L388 226 L300 305 L212 226 L195 91Z" fill="#f4f0df" stroke="#17263b" stroke-width="3"/><text x="300" y="113" text-anchor="middle" font-size="31" font-weight="900" fill="#17263b">STATE</text><text x="300" y="226" text-anchor="middle" font-size="${n.length>3?72:96}" font-weight="900" fill="#17263b">${esc(n)}</text>`;
+}
+function render(){
+ const type=$('type').value,n=esc($('number').value.trim()||'—'),dir=$('direction').value,arrow=$('arrow').value,post=$('post').checked,border=$('border').checked,scale=+$('scale').value;
+ let dirText=dir?dir:'',arrowText=({none:'',up:'↑',left:'←',right:'→',down:'↓'})[arrow];
+ const signY=dir||arrowText?20:48, signScale=scale;
+ let content=shield(type,n);
+ if(!border)content=content.replaceAll('stroke-width="8"','stroke-width="0"').replaceAll('stroke-width="10"','stroke-width="0"');
+ let extra='';
+ if(dirText)extra+=`<text x="300" y="370" text-anchor="middle" font-size="30" font-weight="900" letter-spacing="3" fill="#fff">${dirText}</text>`;
+ if(arrowText)extra+=`<text x="300" y="411" text-anchor="middle" font-size="35" font-weight="900" fill="#f3b744">${arrowText}</text>`;
+ const postSvg=post?`<rect x="286" y="330" width="28" height="104" rx="4" fill="#8b929a" stroke="#555e69" stroke-width="3"/><rect x="292" y="336" width="5" height="91" fill="#c7cbd0" opacity=".55"/>`:'';
+ svg.innerHTML=`<title>${type} route ${n} ${dirText}</title><g transform="translate(0,${signY-48}) scale(${signScale}) translate(${300-300*signScale},${220-220*signScale})">${postSvg}${content}${extra}</g>`;
+}
+['type','number','direction','arrow','post','border','scale'].forEach(id=>$(id).addEventListener('input',render));
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function sourceSvg(){return new XMLSerializer().serializeToString(svg).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ')}
+$('svg').onclick=()=>download(new Blob([sourceSvg()],{type:'image/svg+xml;charset=utf-8'}),'route-marker.svg');
+$('png').onclick=()=>{const xml=sourceSvg(),url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml'})),img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1200;c.height=880;c.getContext('2d').clearRect(0,0,1200,880);c.getContext('2d').drawImage(img,0,0,1200,880);c.toBlob(b=>download(b,'route-marker.png'),'image/png');URL.revokeObjectURL(url)};img.onerror=()=>{URL.revokeObjectURL(url);alert('PNG export failed in this browser. Try SVG export instead.')};img.src=url};
+$('reset').onclick=()=>{$('type').value='interstate';$('number').value='40';$('direction').value='NORTH';$('arrow').value='none';$('post').checked=true;$('border').checked=true;$('scale').value='1';render()};
+render();
+</script>
+</body></html>
